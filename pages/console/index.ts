@@ -1,26 +1,24 @@
 import React from "react";
 
 export default function index() {
-  let orderId = 0;
+  let orderId = 1;
 
   // Create a Pizza object type, that includes a name and a price property
-
   type Pizza = {
     name: string;
     price: number;
   };
-  const menu = [
+  let menu: Array<Pizza> = [
     { name: "Marguerita", price: 8 },
     { name: "Pepperoni", price: 10 },
     { name: "Hawaiian", price: 8 },
-    { name: "Marguerita", price: "ten" },
+    { name: "Marguerita", price: 10 },
     { name: "Veggie", price: 9 },
   ];
 
   let myName: string = "Bob";
   let numberOfWheels: number = 4;
   let isStudent: boolean = false;
-  myName = 1;
 
   // Move the nested address object type into a separate type definition
 
@@ -39,30 +37,48 @@ export default function index() {
     //   city: string;
     //   country: string;
     // };
-    address: Address;
+    address?: Address;
   };
   let person1: Person = {
     name: "John",
     age: 42,
     isStudent: false,
-    address: {
-      street: "Gioconda St.",
-      city: "Boston",
-      country: "Barbados",
-    },
+    // address: {
+    //   street: "Gioconda St.",
+    //   city: "Boston",
+    //   country: "Barbados",
+    // },
+  };
+  let person2: Person = {
+    name: "Marry",
+    age: 33,
+    isStudent: true,
   };
   let cashInRegister = 100;
-  const orderQueue = [];
+  const orderQueue: Order[] = [];
 
+  function displayInfo(person: Person) {
+    console.log(`${person.name} lives at ${person.address?.street}`);
+  }
+  displayInfo(person1);
+
+  // Add an Order type with id, pizza, and status properties
+  type Order = {
+    id: number;
+    pizza: Pizza;
+    status: string;
+  };
+
+  // Create an array of people objects and manually type it as an array of Person types
+
+  let people: Person[] = [person1, person2];
+  //also (same): another syntax
+  Array<Person>;
   // Add utility function that takes a pizza object and adds it to the menu
   function addNewPizza(pizzaObject: Pizza) {
-    if (!pizzaObject.name || !pizzaObject.price) {
-      console.log("Please inform a name and a price for the new pizza");
-      return;
-    }
-    menu.push = pizzaObject;
+    menu.push(pizzaObject);
   }
-  const newPizza = { name: "Peppolitanna", price: "ten" };
+  const newPizza: Pizza = { name: "Peppolitanna", price: 14 };
   addNewPizza(newPizza);
   console.log("menu", menu);
 
@@ -74,16 +90,16 @@ export default function index() {
   // 4. Returns the new order object (just in case we need it later)
   function placeOrder(pizza: string) {
     const selectedPizza = menu.find((item) => item.name === pizza);
-    console.log("selectedPizza", selectedPizza);
+    //console.log("selectedPizza", selectedPizza);
     if (!selectedPizza) {
       console.error("Not found");
       return;
     }
     cashInRegister += selectedPizza.price;
     const newOrder = {
-      pizza: selectedPizza.name,
+      id: orderId++,
+      pizza: selectedPizza,
       status: "ordered",
-      orderId: orderId + 1,
     };
     orderQueue.push(newOrder);
     return newOrder;
@@ -97,26 +113,31 @@ export default function index() {
   // Use a global `nextOrderId` variable and increment it every time a new order
   // is created
   function completeOrder(orderId: number) {
-    const foundOrder = orderQueue.find((item) => item.orderId === orderId);
-    const indexOfOrder = orderQueue.findIndex(
-      (item) => item.orderId === orderId
-    );
-    orderQueue[indexOfOrder].status = "completed";
-    return foundOrder;
+    const order = orderQueue.find((order) => order.id === orderId);
+    if (!order) {
+      console.error(`${orderId} not found in the orderQueue`);
+      return;
+    }
+    order.status = "completed";
+    return order;
   }
-  console.log("completeOrder:", completeOrder(1));
+
   addNewPizza({ name: "Chicken Ranch", price: 12 });
   addNewPizza({ name: "BBQ", price: 12 });
   addNewPizza({ name: "Spicy Sausage", price: 11 });
+  console.log("menu", menu);
   placeOrder("Chicken Ranch");
+  placeOrder("BBQ");
+  console.log("orderQueue", orderQueue);
   completeOrder(1);
-
+  console.log("completeOrder:", completeOrder(1));
+  console.log("completeOrder:", completeOrder(3));
   console.log("Menu:", menu);
   console.log("Cash in register", cashInRegister);
   console.log("Order queue", orderQueue);
-  return (
-    <div>
-      <h1>App Explorer</h1>
-    </div>
-  );
+  // return (
+  //   // <div>
+  //   //   <h1>App Explorer</h1>
+  //   // </div>
+  // );
 }
