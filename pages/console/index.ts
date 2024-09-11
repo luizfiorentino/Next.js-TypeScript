@@ -62,11 +62,14 @@ export default function index() {
   }
   displayInfo(person1);
 
+  // Use literal types and unions to update Order status to be only "ordered" or "completed"
+
   // Add an Order type with id, pizza, and status properties
   type Order = {
     id: number;
     pizza: Pizza;
-    status: string;
+    // status: string;
+    status: "ordered" | "completed";
   };
 
   // Create an array of people objects and manually type it as an array of Person types
@@ -96,7 +99,7 @@ export default function index() {
       return;
     }
     cashInRegister += selectedPizza.price;
-    const newOrder = {
+    const newOrder: Order = {
       id: orderId++,
       pizza: selectedPizza,
       status: "ordered",
@@ -135,6 +138,14 @@ export default function index() {
   console.log("Menu:", menu);
   console.log("Cash in register", cashInRegister);
   console.log("Order queue", orderQueue);
+
+  type UserRole = "gest" | "admin";
+  let userRole: UserRole = "admin";
+  type User = {
+    userName: string;
+    role: UserRole;
+  };
+
   // return (
   //   // <div>
   //   //   <h1>App Explorer</h1>
