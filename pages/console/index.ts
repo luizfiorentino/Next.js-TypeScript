@@ -2,26 +2,67 @@ import React from "react";
 
 export default function index() {
   let orderId = 0;
+
+  // Create a Pizza object type, that includes a name and a price property
+
+  type Pizza = {
+    name: string;
+    price: number;
+  };
   const menu = [
     { name: "Marguerita", price: 8 },
     { name: "Pepperoni", price: 10 },
     { name: "Hawaiian", price: 8 },
-    { name: "Marguerita", price: 10 },
+    { name: "Marguerita", price: "ten" },
     { name: "Veggie", price: 9 },
   ];
 
+  let myName: string = "Bob";
+  let numberOfWheels: number = 4;
+  let isStudent: boolean = false;
+  myName = 1;
+
+  // Move the nested address object type into a separate type definition
+
+  type Address = {
+    street: string;
+    city: string;
+    country: string;
+  };
+
+  type Person = {
+    name: string;
+    age: number;
+    isStudent: boolean;
+    // address: {
+    //   street: string;
+    //   city: string;
+    //   country: string;
+    // };
+    address: Address;
+  };
+  let person1: Person = {
+    name: "John",
+    age: 42,
+    isStudent: false,
+    address: {
+      street: "Gioconda St.",
+      city: "Boston",
+      country: "Barbados",
+    },
+  };
   let cashInRegister = 100;
-  let orderQueue = [];
+  const orderQueue = [];
 
   // Add utility function that takes a pizza object and adds it to the menu
-  function addNewPizza(pizzaObject) {
+  function addNewPizza(pizzaObject: Pizza) {
     if (!pizzaObject.name || !pizzaObject.price) {
       console.log("Please inform a name and a price for the new pizza");
       return;
     }
     menu.push = pizzaObject;
   }
-  const newPizza = { name: "Peppolitanna", price: 10 };
+  const newPizza = { name: "Peppolitanna", price: "ten" };
   addNewPizza(newPizza);
   console.log("menu", menu);
 
@@ -31,9 +72,13 @@ export default function index() {
   // 3. pushes a new "order object" to the orderQueue
   // eg. { pizza: selectedPizzaObjectFromStep1, status: "ordered"}
   // 4. Returns the new order object (just in case we need it later)
-  function placeOrder(pizza) {
+  function placeOrder(pizza: string) {
     const selectedPizza = menu.find((item) => item.name === pizza);
     console.log("selectedPizza", selectedPizza);
+    if (!selectedPizza) {
+      console.error("Not found");
+      return;
+    }
     cashInRegister += selectedPizza.price;
     const newOrder = {
       pizza: selectedPizza.name,
@@ -51,7 +96,7 @@ export default function index() {
   // For good measure return the found order from the function.
   // Use a global `nextOrderId` variable and increment it every time a new order
   // is created
-  function completeOrder(orderId) {
+  function completeOrder(orderId: number) {
     const foundOrder = orderQueue.find((item) => item.orderId === orderId);
     const indexOfOrder = orderQueue.findIndex(
       (item) => item.orderId === orderId
@@ -64,7 +109,7 @@ export default function index() {
   addNewPizza({ name: "BBQ", price: 12 });
   addNewPizza({ name: "Spicy Sausage", price: 11 });
   placeOrder("Chicken Ranch");
-  completeOrder("1");
+  completeOrder(1);
 
   console.log("Menu:", menu);
   console.log("Cash in register", cashInRegister);
