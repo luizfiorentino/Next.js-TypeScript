@@ -1,49 +1,56 @@
 import React from "react";
 
-export default function index() {
+type Pizza = {
+  id: number;
+  name: string;
+  price: number;
+};
+
+// Move the nested address object type into a separate type definition
+type Address = {
+  street: string;
+  city: string;
+  country: string;
+};
+
+type Person = {
+  name: string;
+  age: number;
+  isStudent: boolean;
+  // address: {
+  //   street: string;
+  //   city: string;
+  //   country: string;
+  // };
+  address?: Address;
+};
+
+// Add an Order type with id, pizza, and status properties
+// Use literal types and unions to update Order status to be only "ordered" or "completed"
+type Order = {
+  id: number;
+  pizza: Pizza;
+  // status: string;
+  status: "ordered" | "completed";
+};
+let menu: Array<Pizza> = [
+  { id: 1, name: "Marguerita", price: 8 },
+  { id: 2, name: "Pepperoni", price: 10 },
+  { id: 3, name: "Hawaiian", price: 8 },
+  { id: 4, name: "Marguerita", price: 10 },
+  { id: 5, name: "Veggie", price: 9 },
+];
+
+export function getPizzaDetail(identifier: string | number) {
+  if (typeof identifier === "string") {
+    return menu.find((pizza) => pizza.name.toLocaleLowerCase() === identifier);
+  } else {
+    return menu.find((pizza) => pizza.id === identifier);
+  }
+}
+
+export function index() {
   let orderId = 1;
-
-  type Pizza = {
-    id: number;
-    name: string;
-    price: number;
-  };
-
-  // Move the nested address object type into a separate type definition
-  type Address = {
-    street: string;
-    city: string;
-    country: string;
-  };
-
-  type Person = {
-    name: string;
-    age: number;
-    isStudent: boolean;
-    // address: {
-    //   street: string;
-    //   city: string;
-    //   country: string;
-    // };
-    address?: Address;
-  };
-
-  // Add an Order type with id, pizza, and status properties
-  // Use literal types and unions to update Order status to be only "ordered" or "completed"
-  type Order = {
-    id: number;
-    pizza: Pizza;
-    // status: string;
-    status: "ordered" | "completed";
-  };
-
-  let menu: Array<Pizza> = [
-    { id: 1, name: "Marguerita", price: 8 },
-    { id: 2, name: "Pepperoni", price: 10 },
-    { id: 3, name: "Hawaiian", price: 8 },
-    { id: 4, name: "Marguerita", price: 10 },
-    { id: 5, name: "Veggie", price: 9 },
-  ];
 
   let person1: Person = {
     name: "John",
@@ -122,16 +129,8 @@ export default function index() {
 
   // Create an utility function getPizzaDetail that takes a parameter called `identifier`
   // that is either the string name of the pizza or its id
-  function getPizzaDetail(identifier: string | number) {
-    if (typeof identifier === "string") {
-      return menu.find(
-        (pizza) => pizza.name.toLocaleLowerCase() === identifier
-      );
-    } else {
-      return menu.find((pizza) => pizza.id === identifier);
-    }
-  }
-  console.log("selected pizza", getPizzaDetail("hawaiian"));
+
+  //console.log("selected pizza", getPizzaDetail("hawaiian"));
 
   addNewPizza({ id: 7, name: "Chicken Ranch", price: 12 });
   addNewPizza({ id: 8, name: "BBQ", price: 12 });
@@ -157,10 +156,4 @@ export default function index() {
   // let myName: string = "Bob";
   // let numberOfWheels: number = 4;
   // let isStudent: boolean = false;
-
-  // return (
-  //   // <div>
-  //   //   <h1>App Explorer</h1>
-  //   // </div>
-  // );
 }
