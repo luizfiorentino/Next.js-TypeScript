@@ -45,6 +45,7 @@ type User = {
 type UpdatedUser = Partial<User>;
 
 let nextPizzaId = 1;
+let nextUserId = 1;
 
 let menu: Array<Pizza> = [
   { id: nextPizzaId++, name: "Marguerita", price: 8 },
@@ -69,9 +70,9 @@ export function getPizzaDetail(identifier: string | number): Pizza | undefined {
 }
 
 const users: User[] = [
-  { id: 1, userName: "Joe Margolis", role: "member" },
-  { id: 2, userName: "Jane Doe", role: "admin" },
-  { id: 3, userName: "Kaf Pergolis", role: "guest" },
+  { id: nextUserId++, userName: "Joe Margolis", role: "member" },
+  { id: nextUserId++, userName: "Jane Doe", role: "admin" },
+  { id: nextUserId++, userName: "Kaf Pergolis", role: "guest" },
 ];
 
 // const target = { a: 1, b: 2 };
@@ -91,9 +92,8 @@ function updateUser(id: number, updates: UpdatedUser) {
   return updatedUser;
 }
 
-console.log("USER", updateUser(2, { id: 10, role: "guest" }));
-console.log("USER", updateUser(1, { id: 10, userName: "Janette Mamam" }));
-console.log("USERSS", users);
+// console.log("USER", updateUser(2, { id: 10, role: "guest" }));
+// console.log("USER", updateUser(1, { id: 10, userName: "Janette Mamam" }));
 
 function fetchUserDetails(username: string): User {
   const user = users.find((user) => user.userName === username);
@@ -103,6 +103,13 @@ function fetchUserDetails(username: string): User {
   return user;
 }
 
+function addNewUser(newUser: Omit<User, "id">): User {
+  const user: User = { ...newUser, id: nextUserId++ };
+  users.push(user);
+  return user;
+}
+addNewUser({ userName: "Jim Schmoe", role: "member" });
+console.log("USERSS", users);
 export default function index() {
   let orderId = 1;
 
