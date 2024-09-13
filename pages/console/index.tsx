@@ -42,6 +42,8 @@ type User = {
   role: UserRole;
 };
 
+type UpdatedUser = Partial<User>;
+
 let nextPizzaId = 1;
 
 let menu: Array<Pizza> = [
@@ -79,12 +81,12 @@ const users: User[] = [
 // // Expected output: Object { a: 1, b: 4, c: 5 }
 // console.log(returnedTarget === target);
 // // Expected output: true
-function updateUser(id: number, updates: any) {
+function updateUser(id: number, updates: UpdatedUser) {
   const user = users.find((user) => user.id === id);
   if (!user) {
     console.error("User not found");
+    return;
   }
-  const index = users.indexOf(user);
   const updatedUser = Object.assign(user, updates);
   return updatedUser;
 }
