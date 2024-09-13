@@ -33,23 +33,75 @@ type Order = {
   // status: string;
   status: "ordered" | "completed";
 };
+
+type UserRole = "guest" | "member" | "admin";
+
+type User = {
+  id: number;
+  userName: string;
+  role: UserRole;
+};
+
+let nextPizzaId = 1;
+
 let menu: Array<Pizza> = [
-  { id: 1, name: "Marguerita", price: 8 },
-  { id: 2, name: "Pepperoni", price: 10 },
-  { id: 3, name: "Hawaiian", price: 8 },
-  { id: 4, name: "Marguerita", price: 10 },
-  { id: 5, name: "Veggie", price: 9 },
+  { id: nextPizzaId++, name: "Marguerita", price: 8 },
+  { id: nextPizzaId++, name: "Pepperoni", price: 10 },
+  { id: nextPizzaId++, name: "Hawaiian", price: 8 },
+  { id: nextPizzaId++, name: "Marguerita", price: 10 },
+  { id: nextPizzaId++, name: "Veggie", price: 9 },
 ];
 
-export function getPizzaDetail(identifier: string | number) {
+console.log("MENU", menu);
+
+export function getPizzaDetail(identifier: string | number): Pizza | undefined {
+  console.log("function called", identifier);
   if (typeof identifier === "string") {
-    return menu.find((pizza) => pizza.name.toLocaleLowerCase() === identifier);
+    console.log("called as string");
+    return menu.find(
+      (pizza) => pizza.name.toLowerCase() === identifier.toLowerCase()
+    );
   } else {
     return menu.find((pizza) => pizza.id === identifier);
   }
 }
 
-export function index() {
+const users: User[] = [
+  { id: 1, userName: "Joe Margolis", role: "member" },
+  { id: 2, userName: "Jane Doe", role: "admin" },
+  { id: 3, userName: "Kaf Pergolis", role: "guest" },
+];
+
+// const target = { a: 1, b: 2 };
+// const source = { b: 4, c: 5 };
+// const returnedTarget = Object.assign(target, source);
+// console.log(target);
+// // Expected output: Object { a: 1, b: 4, c: 5 }
+// console.log(returnedTarget === target);
+// // Expected output: true
+function updateUser(id: number, updates: any) {
+  const user = users.find((user) => user.id === id);
+  if (!user) {
+    console.error("User not found");
+  }
+  const index = users.indexOf(user);
+  const updatedUser = Object.assign(user, updates);
+  return updatedUser;
+}
+
+console.log("USER", updateUser(2, { id: 10, role: "guest" }));
+console.log("USER", updateUser(1, { id: 10, userName: "Janette Mamam" }));
+console.log("USERSS", users);
+
+function fetchUserDetails(username: string): User {
+  const user = users.find((user) => user.userName === username);
+  if (!user) {
+    throw new Error(`User with username ${username} not found`);
+  }
+  return user;
+}
+
+export default function index() {
   let orderId = 1;
 
   let person1: Person = {
@@ -79,8 +131,9 @@ export function index() {
   let people: Person[] = [person1, person2];
   //also (same): another syntax
   Array<Person>;
-  // Add utility function that takes a pizza object and adds it to the menu
-  function addNewPizza(pizzaObject: Pizza) {
+
+  function addNewPizza(pizzaObject: Pizza): void {
+    pizzaObject.id = nextPizzaId++;
     menu.push(pizzaObject);
   }
   const newPizza: Pizza = { id: 6, name: "Peppolitanna", price: 14 };
@@ -93,7 +146,7 @@ export function index() {
   // 3. pushes a new "order object" to the orderQueue
   // eg. { pizza: selectedPizzaObjectFromStep1, status: "ordered"}
   // 4. Returns the new order object (just in case we need it later)
-  function placeOrder(pizza: string) {
+  function placeOrder(pizza: string): Order | undefined {
     const selectedPizza = menu.find((item) => item.name === pizza);
     //console.log("selectedPizza", selectedPizza);
     if (!selectedPizza) {
@@ -117,7 +170,7 @@ export function index() {
   // For good measure return the found order from the function.
   // Use a global `nextOrderId` variable and increment it every time a new order
   // is created
-  function completeOrder(orderId: number) {
+  function completeOrder(orderId: number): Order | undefined {
     const order = orderQueue.find((order) => order.id === orderId);
     if (!order) {
       console.error(`${orderId} not found in the orderQueue`);
@@ -132,9 +185,9 @@ export function index() {
 
   //console.log("selected pizza", getPizzaDetail("hawaiian"));
 
-  addNewPizza({ id: 7, name: "Chicken Ranch", price: 12 });
-  addNewPizza({ id: 8, name: "BBQ", price: 12 });
-  addNewPizza({ id: 9, name: "Spicy Sausage", price: 11 });
+  addNewPizza({ name: "Chicken Ranch", price: 12 });
+  addNewPizza({ name: "BBQ", price: 12 });
+  addNewPizza({ name: "Spicy Sausage", price: 11 });
   console.log("menu", menu);
   placeOrder("Chicken Ranch");
   placeOrder("BBQ");
