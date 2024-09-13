@@ -141,13 +141,44 @@ export default function index() {
   //also (same): another syntax
   Array<Person>;
 
-  function addNewPizza(pizzaObject: Pizza): void {
-    pizzaObject.id = nextPizzaId++;
-    menu.push(pizzaObject);
+  function addNewPizza(pizzaObject: Omit<Pizza, "id">): Pizza {
+    const newPizza: Pizza = {
+      id: nextPizzaId++,
+      ...pizzaObject,
+    };
+    menu.push(newPizza);
+    return newPizza;
   }
+
+  addNewPizza({ name: "Chicken Ranch", price: 12 });
+  addNewPizza({ name: "BBQ", price: 12 });
+  addNewPizza({ name: "Spicy Sausage", price: 11 });
+
   const newPizza: Pizza = { id: 6, name: "Peppolitanna", price: 14 };
   addNewPizza(newPizza);
   console.log("menu", menu);
+
+  const gameScores = [14, 21, 33, 42, 59];
+  const favoriteThings = [
+    "raindrops on roses",
+    "whiskers on kittens",
+    "bright kettles",
+    "warm woolen mittens",
+  ];
+  const voters = [
+    { name: "Alice", age: 42 },
+    { name: "Bob", age: 77 },
+  ];
+
+  function getLastItem<PlaceholderType>(array: PlaceholderType[]) {
+    return array[array.length - 1];
+  }
+  console.log(
+    "last items",
+    getLastItem(gameScores),
+    getLastItem(favoriteThings),
+    getLastItem(voters)
+  );
 
   // Write an utility function, placeOrder, that takes a pizza parameter and:
   // 1. finds that pizza object in the menu
@@ -194,10 +225,6 @@ export default function index() {
 
   //console.log("selected pizza", getPizzaDetail("hawaiian"));
 
-  addNewPizza({ name: "Chicken Ranch", price: 12 });
-  addNewPizza({ name: "BBQ", price: 12 });
-  addNewPizza({ name: "Spicy Sausage", price: 11 });
-  console.log("menu", menu);
   placeOrder("Chicken Ranch");
   placeOrder("BBQ");
   console.log("orderQueue", orderQueue);
